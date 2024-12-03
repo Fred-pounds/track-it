@@ -18,16 +18,20 @@ class Chart extends StatelessWidget {
           totalSum += transaction[i].amount;
         }
       }
-      return {'day': DateFormat.E(weekDay), 'amount': totalSum};
+      return {'day': DateFormat.E().format(weekDay).substring(0,1), 'amount': totalSum};
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
+    return Card(
       elevation: 6,
-      margin: EdgeInsets.all(20),
-      child: Row(),
+      margin:const  EdgeInsets.all(20),
+      child: Row(
+        children: groupedTransactionvalue.map((data) {
+          return Text('data');
+        }).toList()
+      ),
     );
   }
 }
