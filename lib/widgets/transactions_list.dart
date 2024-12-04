@@ -4,7 +4,12 @@ import 'package:track_it/models/transactions.dart';
 
 class TransactionsList extends StatelessWidget {
   final List<Transaction> transactions;
-  const TransactionsList({super.key, required this.transactions});
+  final Function deleteTx;
+  const TransactionsList({
+    super.key,
+    required this.transactions,
+    required this.deleteTx,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,63 +20,48 @@ class TransactionsList extends StatelessWidget {
                 'No Expense added yet!',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-            const  SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
               SizedBox(
-                height: 200, 
-//width: double.infinity,
+                  height: 200,
                   child: Image.asset(
-                'assets/images/waiting.png',
-                fit: BoxFit.cover,
-              )),
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  )),
             ],
           )
         : SizedBox(
-            height: MediaQuery.sizeOf(context).height * 1 / 2,
+            height: MediaQuery.sizeOf(context).height * 0.6,
             child: ListView.builder(
               itemBuilder: (context, index) {
                 return Card(
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 15,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                            width: 2,
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          transactions[index].amount.toStringAsFixed(2),
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: FittedBox(
+                            child: Text('₵${transactions[index].amount}'),
                           ),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            transactions[index].title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            DateFormat.yMMMd().format(transactions[index].date),
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                      title: Text(
+                        transactions[index].title,
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                      subtitle: Text(
+                        DateFormat.yMMMd().format(transactions[index].date),
+                      ),
+                      trailing: IconButton(
+                          onPressed: () => deleteTx(transactions[index].id),
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          )),
+                    ),
                   ),
                 );
               },

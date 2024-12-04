@@ -33,16 +33,28 @@ class _HomepageState extends State<Homepage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+    String txTitle,
+    double txAmount,
+    DateTime chosenDate,
+  ) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: chosenDate,
     );
 
     setState(() {
       transactions.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      transactions.removeWhere((tx) {
+        return tx.id == id;
+      });
     });
   }
 
@@ -63,10 +75,10 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(
+        title: Text(
           'Track It',
           style: Theme.of(context).textTheme.titleLarge,
-                  ),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -82,6 +94,7 @@ class _HomepageState extends State<Homepage> {
             Chart(transaction: recentTransactions),
             TransactionsList(
               transactions: transactions,
+              deleteTx: _deleteTransaction,
             ),
           ],
         ),
@@ -95,6 +108,4 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
-
- 
 }
